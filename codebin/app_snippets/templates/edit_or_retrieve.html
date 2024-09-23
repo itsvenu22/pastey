@@ -1,25 +1,65 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if snippet %}{{ snippet.slug }}{% else %}New Snippet{% endif %}</title>
+    <title>{% if snippet %}Editing: {{ snippet.slug }}{% else %}Create a New Snippet{% endif %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/theme/dracula.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/theme/night.min.css">
 </head>
 
 <body>
-    <h1>{% if snippet %}{{ snippet.slug }}{% else %}Create a New Snippet{% endif %}</h1>
+    <div class="container">
+        <h1>{% if snippet %}Editing: {{ snippet.slug }}{% else %}Create a New Snippet{% endif %}</h1>
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
-    </form>
+        <form method="POST" id="snippet-form">
+            {% csrf_token %}
+            <label for="content">Snippet Content:</label>
+            <textarea id="new-content" name="content">{{ form.content.value }}</textarea>
+            <div class="button-container">
+                <button type="button" id="copy-button">Copy</button>
+                <button type="submit">Save</button>
+            </div>
+        </form>
+    </div>
 
-    {% if snippet %}
-    <h3>Current Content:</h3>
-    <pre>{{ snippet.content }}</pre>
-    {% endif %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/mode/javascript/javascript.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/mode/python/python.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/mode/clike/clike.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/mode/htmlmixed/htmlmixed.js"></script>
+
+    <script>
+        var editorNewContent = CodeMirror.fromTextArea(document.getElementById("new-content"), {
+            lineNumbers: true,
+            mode: "python",
+            theme: "night",
+            matchBrackets: true,
+            autoCloseBrackets: true,
+            tabSize: 4,
+            indentWithTabs: true,
+        });
+
+        document.getElementById("snippet-form").onsubmit = function () {
+            document.getElementById("new-content").value = editorNewContent.getValue();
+        };
+
+        document.getElementById("copy-button").onclick = function () {
+            var snippetContent = editorNewContent.getValue();
+            var tempTextArea = document.createElement("textarea");
+            tempTextArea.value = snippetContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempTextArea);
+            alert("Snippet copied to clipboard!");
+        };
+    </script>
 </body>
 
 </html>
