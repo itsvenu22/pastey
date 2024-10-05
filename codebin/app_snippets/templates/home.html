@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pastey - Your Aesthetic Pastebin</title>
+    <title>Pastey</title>
     <link href="https://fonts.googleapis.com/css2?family=Courier+New&display=swap" rel="stylesheet">
     <style>
         body {
@@ -60,7 +60,6 @@
             transition: background-color 0.3s, transform 0.2s;
             box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
             margin: 10px;
-            /* Added margin for better spacing */
         }
 
         .cta button:hover {
@@ -85,11 +84,9 @@
             text-align: center;
         }
 
-        /* Responsive styling */
         @media (max-width: 1024px) {
             .container {
                 padding: 40px 20px;
-                /* Less padding for medium screens */
             }
 
             h1 {
@@ -186,8 +183,8 @@
             pastey.venukanthan.wiki/<strong><span class="dynamic-word"></span></strong>
         </p>
         <div class="cta">
-            <button onclick="window.location.href='https://pastey.venukanthan.wiki'">Try Pastey 🚀</button>
-            <button onclick="window.open('https://pastey.venukanthan.wiki', '_blank')">Connect with 🌐</button>
+            <button onclick="generateRandomCode()" target="_blank">Try Pastey 🚀</button>
+            <button onclick="window.open('https://venukanthan.wiki', '_blank')">Connect with 🌐</button>
         </div>
     </div>
 
@@ -229,6 +226,11 @@
         }
 
         typeWord(words[i]);
+
+        function generateRandomCode() {
+            const randomString = Math.random().toString(36).substring(2, 6);
+            window.location.href = `https://pastey.venukanthan.wiki/${randomString}`;
+        }
     </script>
 </body>
 
