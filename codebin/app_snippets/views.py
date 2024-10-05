@@ -2,6 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Snippet
 from .forms import SnippetForm
 
+def home(request):
+    return render(request, "home.html")
+
 def edit_or_retrieve(request, slug):
     try:
         snippet = Snippet.objects.get(slug=slug)
